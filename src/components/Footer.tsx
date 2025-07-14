@@ -69,25 +69,23 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-maritime-gold mt-1 flex-shrink-0" />
                 <div className="text-white/70">
-                  <p>123 Harbor View Drive</p>
-                  <p>Maritime District</p>
-                  <p>Port City, PC 12345</p>
+                  <p>Mama Ngina Street,</p>
+                  <p>International House, 3rd Floor</p>
+                  <p>Nairobi CBD</p>
                 </div>
               </div>
               
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-maritime-gold flex-shrink-0" />
                 <div className="text-white/70">
-                  <p>+1 (555) 123-4567</p>
-                  <p>+1 (555) 123-4568</p>
+                  <p>+254 715 348 937</p>
                 </div>
               </div>
               
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-maritime-gold flex-shrink-0" />
                 <div className="text-white/70">
-                  <p>info@gasawashipping.com</p>
-                  <p>quotes@gasawashipping.com</p>
+                  <p>info@gasawa-shipping.com</p>
                 </div>
               </div>
             </div>
