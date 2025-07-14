@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import emailjs from '@emailjs/browser';
 import { 
   MapPin, 
   Phone, 
@@ -54,20 +54,28 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Calling edge function with data:", formData);
+      console.log("Sending email with EmailJS...");
       
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
-      });
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        service_type: formData.service_type,
+        message: formData.message,
+        to_name: "Gasawa Shipping Team",
+        to_email: "info@gasawa-shipping.com"
+      };
 
-      console.log("Edge function response:", { data, error });
+      const result = await emailjs.send(
+        'service_ofst3p8',
+        'template_g7l6kxm',
+        templateParams,
+        'bNfT3rgt0Itdd-1SC'
+      );
 
-      if (error) {
-        console.error("Edge function error:", error);
-        throw error;
-      }
+      console.log("EmailJS response:", result);
 
-      if (data?.success) {
+      if (result.status === 200) {
         console.log("Success! Message sent successfully");
         toast({
           title: "Message sent successfully!",
@@ -83,14 +91,13 @@ const Contact = () => {
           message: ""
         });
       } else {
-        console.error("Edge function returned unsuccessful response:", data);
-        throw new Error(data?.error || "Failed to send message");
+        throw new Error("Failed to send message");
       }
     } catch (error: any) {
       console.error("Error sending contact form:", error);
       toast({
         title: "Error sending message",
-        description: error.message || "Something went wrong. Please try again.",
+        description: error.text || error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
