@@ -1,18 +1,92 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   MapPin, 
   Phone, 
   Mail, 
   Clock, 
   Send,
-  Globe
+  Globe,
+  Loader2
 } from "lucide-react";
 
 const Contact = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service_type: "",
+    message: ""
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields (name, email, and message).",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.success) {
+        toast({
+          title: "Message sent successfully!",
+          description: "Thank you for contacting us. We'll get back to you soon.",
+        });
+        
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service_type: "",
+          message: ""
+        });
+      } else {
+        throw new Error(data?.error || "Failed to send message");
+      }
+    } catch (error: any) {
+      console.error("Error sending contact form:", error);
+      toast({
+        title: "Error sending message",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const contactInfo = [
     {
       icon: MapPin,
@@ -87,42 +161,91 @@ const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name" className="text-white mb-2 block">Full Name</Label>
-                    <Input id="name" placeholder="Your full name" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
-                  </div>
-                  <div>
-                    <Label htmlFor="email" className="text-white mb-2 block">Email Address</Label>
-                    <Input id="email" type="email" placeholder="your@email.com" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="phone" className="text-white mb-2 block">Phone Number</Label>
-                    <Input id="phone" placeholder="+254 715 348 937" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
-                  </div>
-                  <div>
-                    <Label htmlFor="service" className="text-white mb-2 block">Service Type</Label>
-                    <Input id="service" placeholder="e.g., Freight Forwarding" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
-                  </div>
-                </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name" className="text-white mb-2 block">Full Name *</Label>
+                        <Input 
+                          id="name" 
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Your full name" 
+                          className="bg-white/10 border-white/30 text-white placeholder-white/60"
+                          required 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email" className="text-white mb-2 block">Email Address *</Label>
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="your@email.com" 
+                          className="bg-white/10 border-white/30 text-white placeholder-white/60"
+                          required 
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="phone" className="text-white mb-2 block">Phone Number</Label>
+                        <Input 
+                          id="phone" 
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="+254 715 348 937" 
+                          className="bg-white/10 border-white/30 text-white placeholder-white/60" 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="service_type" className="text-white mb-2 block">Service Type</Label>
+                        <Input 
+                          id="service_type" 
+                          value={formData.service_type}
+                          onChange={handleInputChange}
+                          placeholder="e.g., Freight Forwarding" 
+                          className="bg-white/10 border-white/30 text-white placeholder-white/60" 
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <Label htmlFor="message" className="text-white mb-2 block">Message</Label>
-                  <Textarea 
-                    id="message" 
-                    placeholder="Tell us about your shipping requirements..." 
-                    rows={5}
-                    className="bg-white/10 border-white/30 text-white placeholder-white/60"
-                  />
-                </div>
+                    <div>
+                      <Label htmlFor="message" className="text-white mb-2 block">Message *</Label>
+                      <Textarea 
+                        id="message" 
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Tell us about your shipping requirements..." 
+                        rows={5}
+                        className="bg-white/10 border-white/30 text-white placeholder-white/60"
+                        required
+                      />
+                    </div>
 
-                <Button variant="hero" size="lg" className="w-full bg-maritime-gold hover:bg-maritime-gold/90 text-maritime-deep">
-                  Send Message
-                  <Send className="w-5 h-5" />
-                </Button>
+                    <Button 
+                      type="submit" 
+                      variant="hero" 
+                      size="lg" 
+                      className="w-full bg-maritime-gold hover:bg-maritime-gold/90 text-maritime-deep"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          Send Message
+                          <Send className="w-5 h-5" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
               </CardContent>
             </Card>
           </div>
