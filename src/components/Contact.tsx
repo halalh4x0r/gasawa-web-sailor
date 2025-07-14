@@ -38,7 +38,10 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log("Form submitted with data:", formData);
+    
     if (!formData.name || !formData.email || !formData.message) {
+      console.log("Validation failed - missing required fields");
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields (name, email, and message).",
@@ -47,18 +50,25 @@ const Contact = () => {
       return;
     }
 
+    console.log("Starting form submission...");
     setIsSubmitting(true);
 
     try {
+      console.log("Calling edge function with data:", formData);
+      
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: formData
       });
 
+      console.log("Edge function response:", { data, error });
+
       if (error) {
+        console.error("Edge function error:", error);
         throw error;
       }
 
       if (data?.success) {
+        console.log("Success! Message sent successfully");
         toast({
           title: "Message sent successfully!",
           description: "Thank you for contacting us. We'll get back to you soon.",
@@ -73,6 +83,7 @@ const Contact = () => {
           message: ""
         });
       } else {
+        console.error("Edge function returned unsuccessful response:", data);
         throw new Error(data?.error || "Failed to send message");
       }
     } catch (error: any) {
@@ -83,6 +94,7 @@ const Contact = () => {
         variant: "destructive",
       });
     } finally {
+      console.log("Form submission completed");
       setIsSubmitting(false);
     }
   };
