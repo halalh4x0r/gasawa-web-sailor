@@ -37,7 +37,7 @@ const Header = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm">
               <Phone className="w-4 h-4 text-maritime-ocean" />
-              <span className="text-muted-foreground">+1 (555) 123-4567</span>
+              <span className="text-muted-foreground">+254 715 348 937</span>
             </div>
             <Button variant="ocean" size="sm">
               Get Quote

@@ -22,12 +22,12 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+1 (555) 123-4567", "+1 (555) 123-4568", "Emergency: +1 (555) 999-0000"]
+      details: ["+254 715 348 937", "24/7 Customer Support", "Emergency: +254 715 348 937"]
     },
     {
       icon: Mail,
       title: "Email Us",
-      details: ["info@gasawashipping.com", "quotes@gasawashipping.com", "support@gasawashipping.com"]
+      details: ["info@gasawa-shipping.com", "quotes@gasawa-shipping.com", "support@gasawa-shipping.com"]
     },
     {
       icon: Clock,
@@ -101,7 +101,7 @@ const Contact = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="phone" className="text-white mb-2 block">Phone Number</Label>
-                    <Input id="phone" placeholder="+1 (555) 123-4567" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
+                    <Input id="phone" placeholder="+254 715 348 937" className="bg-white/10 border-white/30 text-white placeholder-white/60" />
                   </div>
                   <div>
                     <Label htmlFor="service" className="text-white mb-2 block">Service Type</Label>
