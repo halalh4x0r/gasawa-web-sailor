@@ -5,11 +5,33 @@ import heroShip from "@/assets/hero-ship.jpg";
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroShip})` }}
-      >
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Main background image with sailing animation */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-float opacity-40"
+          style={{ 
+            backgroundImage: `url(${heroShip})`,
+            animationDuration: '8s',
+            animationTimingFunction: 'ease-in-out'
+          }}
+        >
+        </div>
+        
+        {/* Animated waves overlay */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-maritime-ocean/20 via-transparent to-maritime-ocean/20 animate-pulse"></div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-maritime-navy/10 to-maritime-deep/20"
+            style={{
+              backgroundImage: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)',
+              backgroundSize: '200% 200%',
+              animation: 'wave-motion 6s ease-in-out infinite'
+            }}
+          ></div>
+        </div>
+        
+        {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-maritime-deep/90 via-maritime-navy/80 to-maritime-ocean/70"></div>
       </div>
 

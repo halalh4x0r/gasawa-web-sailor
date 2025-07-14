@@ -5,7 +5,7 @@ import portOperations from "@/assets/port-operations.jpg";
 
 const About = () => {
   const stats = [
-    { icon: Users, value: "25+", label: "Years Experience" },
+    { icon: Users, value: "2025", label: "Est. Founded" },
     { icon: Award, value: "1000+", label: "Satisfied Clients" },
     { icon: MapPin, value: "50+", label: "Global Locations" },
     { icon: TrendingUp, value: "99%", label: "On-Time Delivery" }
@@ -24,7 +24,7 @@ const About = () => {
             
             <div className="space-y-6 text-lg text-muted-foreground mb-8">
               <p>
-                For over two decades, Gasawa Shipping Agency Ltd has been at the forefront of international shipping and logistics, connecting businesses to global markets with unmatched reliability and expertise.
+                Since our founding in 2025, Gasawa Shipping Agency Ltd has quickly established itself at the forefront of international shipping and logistics, connecting businesses to global markets with unmatched reliability and expertise.
               </p>
               <p>
                 Our comprehensive suite of services, combined with deep industry knowledge and strategic partnerships worldwide, ensures that your cargo reaches its destination safely, efficiently, and on time.
