@@ -1,40 +1,9 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.5';
+import { Resend } from "npm:resend@2.0.0";
 
-const GOOGLE_API_KEY = Deno.env.get("GOOGLE_API_KEY");
-
-// Function to send email using Gmail API
-async function sendGmailEmail(to: string, subject: string, htmlContent: string, from = "Gasawa Shipping") {
-  const emailData = {
-    raw: btoa(
-      `From: ${from} <noreply@gasawa-shipping.com>\r\n` +
-      `To: ${to}\r\n` +
-      `Subject: ${subject}\r\n` +
-      `Content-Type: text/html; charset=utf-8\r\n\r\n` +
-      htmlContent
-    ).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
-  };
-
-  const response = await fetch(
-    `https://gmail.googleapis.com/gmail/v1/users/me/messages/send?key=${GOOGLE_API_KEY}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GOOGLE_API_KEY}`
-      },
-      body: JSON.stringify(emailData)
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gmail API error: ${response.status} - ${errorText}`);
-  }
-
-  return await response.json();
-}
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -66,7 +35,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { name, email, phone, service_type, message }: ContactSubmission = await req.json();
 
     console.log("Processing contact submission:", { name, email, service_type });
-    console.log("GOOGLE_API_KEY exists:", !!Deno.env.get("GOOGLE_API_KEY"));
+    console.log("RESEND_API_KEY exists:", !!Deno.env.get("RESEND_API_KEY"));
 
     // Save to database
     console.log("Saving to database...");
@@ -92,10 +61,11 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to company
     console.log("Attempting to send email to company...");
     try {
-      const emailResponse = await sendGmailEmail(
-        "info@gasawa-shipping.com",
-        `New Contact Form Submission from ${name}`,
-        `
+      const emailResponse = await resend.emails.send({
+        from: "Contact Form <onboarding@resend.dev>",
+        to: ["info@gasawa-shipping.com"],
+        subject: `New Contact Form Submission from ${name}`,
+        html: `
           <h2>New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
@@ -106,13 +76,12 @@ const handler = async (req: Request): Promise<Response> => {
           <hr>
           <p><small>Submission ID: ${data.id}</small></p>
         `,
-        "Contact Form"
-      );
+      });
 
       console.log("Company email sent successfully:", emailResponse);
       
       if (emailResponse.error) {
-        console.error("Gmail API error for company email:", emailResponse.error);
+        console.error("Resend API error for company email:", emailResponse.error);
         throw new Error(`Email delivery failed: ${emailResponse.error.message}`);
       }
     } catch (emailError: any) {
@@ -123,22 +92,23 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to user
     console.log("Attempting to send confirmation email to user...");
     try {
-      const confirmationResponse = await sendGmailEmail(
-        email,
-        "Thank you for contacting Gasawa Shipping",
-        `
+      const confirmationResponse = await resend.emails.send({
+        from: "Gasawa Shipping <onboarding@resend.dev>",
+        to: [email],
+        subject: "Thank you for contacting Gasawa Shipping",
+        html: `
           <h2>Thank you for contacting us, ${name}!</h2>
           <p>We have received your message and will get back to you as soon as possible.</p>
           <p><strong>Your message:</strong></p>
           <p>${message.replace(/\n/g, '<br>')}</p>
           <p>Best regards,<br>The Gasawa Shipping Team</p>
-        `
-      );
+        `,
+      });
 
       console.log("Confirmation email sent:", confirmationResponse);
       
       if (confirmationResponse.error) {
-        console.error("Gmail API error for confirmation email:", confirmationResponse.error);
+        console.error("Resend API error for confirmation email:", confirmationResponse.error);
         // Don't throw here as the main email was sent successfully
       }
     } catch (confirmError: any) {
