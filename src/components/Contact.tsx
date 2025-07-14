@@ -239,9 +239,8 @@ const Contact = () => {
 
                     <Button 
                       type="submit" 
-                      variant="hero" 
                       size="lg" 
-                      className="w-full bg-maritime-gold hover:bg-maritime-gold/90 text-maritime-deep"
+                      className="w-full bg-maritime-gold hover:bg-maritime-gold/90 text-maritime-deep font-semibold"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
