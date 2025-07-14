@@ -17,7 +17,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Our Location",
-      details: ["123 Harbor View Drive", "Maritime District", "Port City, PC 12345"]
+      details: ["Mama Ngina Street,", "International House, 3rd Floor", "Nairobi CBD"]
     },
     {
       icon: Phone,
