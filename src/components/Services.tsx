@@ -9,6 +9,7 @@ import {
   Clock,
   ArrowRight
 } from "lucide-react";
+import QuoteRequestForm from "./QuoteRequestForm";
 
 const Services = () => {
   const services = [
@@ -100,10 +101,12 @@ const Services = () => {
         </div>
 
         <div className="text-center">
-          <Button variant="ocean" size="lg" className="text-lg px-8">
-            Request Custom Quote
-            <ArrowRight className="w-5 h-5" />
-          </Button>
+          <QuoteRequestForm>
+            <Button variant="ocean" size="lg" className="text-lg px-8">
+              Request Custom Quote
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </QuoteRequestForm>
         </div>
       </div>
     </section>

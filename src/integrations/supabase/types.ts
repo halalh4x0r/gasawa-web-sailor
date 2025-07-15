@@ -47,6 +47,75 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          additional_notes: string | null
+          attachment_url: string | null
+          built: string
+          commodity: string
+          company: string | null
+          country: string
+          crane_capacity: string
+          created_at: string
+          dwt: string
+          email: string
+          grt_nrt: string
+          id: string
+          loa_beam: string
+          name: string
+          phone: string | null
+          port_name: string
+          quantity: string
+          status: string | null
+          updated_at: string
+          vessel_type: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          attachment_url?: string | null
+          built: string
+          commodity: string
+          company?: string | null
+          country: string
+          crane_capacity: string
+          created_at?: string
+          dwt: string
+          email: string
+          grt_nrt: string
+          id?: string
+          loa_beam: string
+          name: string
+          phone?: string | null
+          port_name: string
+          quantity: string
+          status?: string | null
+          updated_at?: string
+          vessel_type: string
+        }
+        Update: {
+          additional_notes?: string | null
+          attachment_url?: string | null
+          built?: string
+          commodity?: string
+          company?: string | null
+          country?: string
+          crane_capacity?: string
+          created_at?: string
+          dwt?: string
+          email?: string
+          grt_nrt?: string
+          id?: string
+          loa_beam?: string
+          name?: string
+          phone?: string | null
+          port_name?: string
+          quantity?: string
+          status?: string | null
+          updated_at?: string
+          vessel_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
