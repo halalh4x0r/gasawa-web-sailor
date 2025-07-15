@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Ship, MapPin, Package, FileText, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { User } from "@supabase/supabase-js";
 import emailjs from '@emailjs/browser';
 
 interface QuoteRequestFormProps {
@@ -20,25 +19,7 @@ interface QuoteRequestFormProps {
 const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -82,16 +63,6 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check if user is authenticated
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "You must be logged in to submit a quote request.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     // Validate required fields
     const requiredFields = ['name', 'email', 'country', 'port_name', 'vessel_type', 'grt_nrt', 'dwt', 'loa_beam', 'built', 'crane_capacity', 'commodity', 'quantity'];
     const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
@@ -108,10 +79,10 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
     setIsLoading(true);
 
     try {
-      // Save to database first
+      // Save to database first  
       const { data, error } = await supabase
         .from('quote_requests')
-        .insert([{ ...formData, user_id: user.id }])
+        .insert([formData])
         .select();
 
       if (error) {
