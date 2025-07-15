@@ -86,7 +86,12 @@ const Services = () => {
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" size="sm" className="group-hover:bg-maritime-ocean group-hover:text-white transition-colors">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="group-hover:bg-maritime-ocean group-hover:text-white transition-colors"
+                  onClick={() => window.open('/services-details.pdf', '_blank')}
+                >
                   Learn More
                 </Button>
               </CardContent>
