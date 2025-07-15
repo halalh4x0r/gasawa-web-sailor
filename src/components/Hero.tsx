@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Ship, Globe, Clock } from "lucide-react";
 import heroShip from "@/assets/hero-ship.jpg";
+import QuoteRequestForm from "./QuoteRequestForm";
 
 const Hero = () => {
   return (
@@ -49,10 +50,12 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <Button variant="hero" size="lg" className="text-lg px-8 py-4">
-              Get Shipping Quote
-              <ArrowRight className="w-5 h-5" />
-            </Button>
+            <QuoteRequestForm>
+              <Button variant="hero" size="lg" className="text-lg px-8 py-4">
+                Get Quote
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </QuoteRequestForm>
             <Button variant="outline" size="lg" className="text-lg px-8 py-4 bg-white/10 border-white/30 text-white hover:bg-white/20">
               Our Services
             </Button>
