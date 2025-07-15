@@ -111,10 +111,10 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
         reply_to: formData.email,
       };
 
-      // Replace these with your EmailJS credentials
-      const SERVICE_ID = 'your_service_id';
-      const TEMPLATE_ID = 'your_template_id';
-      const PUBLIC_KEY = 'your_public_key';
+      // EmailJS credentials
+      const SERVICE_ID = 'service_ofst3p8';
+      const TEMPLATE_ID = 'template_8p1nprb';
+      const PUBLIC_KEY = 'bNfT3rgt0Itdd-1SC';
 
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
 
