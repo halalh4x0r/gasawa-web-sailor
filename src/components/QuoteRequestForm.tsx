@@ -162,10 +162,6 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl text-maritime-navy">
-            <Ship className="w-6 h-6" />
-            Request Custom Quote
-          </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-8">
