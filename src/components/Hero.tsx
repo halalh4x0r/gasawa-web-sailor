@@ -59,21 +59,13 @@ const Hero = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <div className="flex items-center space-x-3 mb-2">
                 <Ship className="w-8 h-8 text-maritime-gold" />
-                <span className="text-3xl font-bold text-white">500+</span>
-              </div>
-              <p className="text-white/80">Ships Serviced</p>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-              <div className="flex items-center space-x-3 mb-2">
-                <Globe className="w-8 h-8 text-maritime-gold" />
                 <span className="text-3xl font-bold text-white">50+</span>
               </div>
-              <p className="text-white/80">Global Ports</p>
+              <p className="text-white/80">Ships Serviced</p>
             </div>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
