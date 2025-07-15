@@ -68,6 +68,7 @@ export type Database = {
           quantity: string
           status: string | null
           updated_at: string
+          user_id: string | null
           vessel_type: string
         }
         Insert: {
@@ -90,6 +91,7 @@ export type Database = {
           quantity: string
           status?: string | null
           updated_at?: string
+          user_id?: string | null
           vessel_type: string
         }
         Update: {
@@ -112,6 +114,7 @@ export type Database = {
           quantity?: string
           status?: string | null
           updated_at?: string
+          user_id?: string | null
           vessel_type?: string
         }
         Relationships: []
