@@ -91,7 +91,7 @@ const Services = () => {
                   variant="outline" 
                   size="sm" 
                   className="group-hover:bg-maritime-ocean group-hover:text-white transition-colors"
-                  onClick={() => window.open('/services-details.pdf', '_blank')}
+                  onClick={() => window.open('/GSA PROFILE.pdf', '_blank')}
                 >
                   Learn More
                 </Button>
