@@ -63,6 +63,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to company
     console.log("Attempting to send email to company...");
+    let emailSent = false;
     try {
       const emailResponse = await resend.emails.send({
         from: "Quote Request <onboarding@resend.dev>",
@@ -100,15 +101,18 @@ const handler = async (req: Request): Promise<Response> => {
         `,
       });
 
-      console.log("Company email sent successfully:", emailResponse);
+      console.log("Company email response:", emailResponse);
       
       if (emailResponse.error) {
         console.error("Resend API error for company email:", emailResponse.error);
-        throw new Error(`Email delivery failed: ${emailResponse.error.message}`);
+        console.error("Email not sent due to domain verification requirements");
+      } else {
+        emailSent = true;
+        console.log("Company email sent successfully");
       }
     } catch (emailError: any) {
       console.error("Failed to send company email:", emailError);
-      throw new Error(`Failed to send notification email: ${emailError.message}`);
+      console.error("Email delivery failed - continuing with quote request processing");
     }
 
     // Send confirmation email to user
@@ -135,13 +139,17 @@ const handler = async (req: Request): Promise<Response> => {
         `,
       });
 
-      console.log("Confirmation email sent:", confirmationResponse);
+      console.log("Confirmation email response:", confirmationResponse);
       
       if (confirmationResponse.error) {
         console.error("Resend API error for confirmation email:", confirmationResponse.error);
+        console.error("Confirmation email not sent due to domain verification requirements");
+      } else {
+        console.log("Confirmation email sent successfully");
       }
     } catch (confirmError: any) {
       console.error("Failed to send confirmation email:", confirmError);
+      console.error("Confirmation email delivery failed - quote request still processed successfully");
     }
 
     console.log("=== Quote Request Function Completed Successfully ===");
@@ -149,7 +157,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(JSON.stringify({ 
       success: true, 
       id: data.id,
-      emailSent: true 
+      emailSent: emailSent 
     }), {
       status: 200,
       headers: {
