@@ -7,14 +7,12 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-maritime-navy to-maritime-ocean rounded-lg flex items-center justify-center">
-              <Anchor className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="font-bold text-lg text-maritime-navy">Gasawa Shipping</h1>
-              <p className="text-xs text-muted-foreground">Agency Ltd</p>
-            </div>
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/6386b520-5fa9-4a04-8806-feb48d7110c2.png" 
+              alt="Gasawa Shipping Agency Ltd" 
+              className="h-12 w-auto"
+            />
           </div>
 
           {/* Navigation */}
