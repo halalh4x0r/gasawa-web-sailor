@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
+# 🌊 Gasawa Shipping Agency Website
 
-## Project info
+Welcome to the official website repository of **Gasawa Shipping Agency Ltd**, established in 2025. This website provides an elegant, modern, and responsive user experience for our global clients in the logistics and shipping industry.
 
-**URL**: https://lovable.dev/projects/4167d7ce-81f9-4020-855d-b2f9634efb05
+## 🚢 About Gasawa Shipping
 
-## How can I edit this code?
+**Gasawa Shipping Agency** is your trusted partner in:
+- Freight forwarding
+- Cargo handling
+- Logistics and inland transport
+- Customs clearance
+- Cargo insurance
+- 24/7 customer support
 
-There are several ways of editing your application.
+We deliver seamless maritime solutions across international waters with a commitment to speed, reliability, and transparency.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4167d7ce-81f9-4020-855d-b2f9634efb05) and start prompting.
+## 💻 Project Overview
 
-Changes made via Lovable will be committed automatically to this repo.
+This website features:
+- 🎥 Full-screen video hero section with a modern dark overlay  
+- ⚙️ Tailwind CSS-powered design  
+- ✨ Font Awesome icons for professional polish  
+- 📱 Fully responsive layout  
+- 📬 Contact form with email functionality  
+- 🧭 Easy navigation for Home, Services, About, and Contact
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Tech               | Description                         |
+|--------------------|-------------------------------------|
+| HTML5              | Markup structure                    |
+| Tailwind CSS (CDN) | Utility-first styling framework     |
+| JavaScript         | Interactive components              |
+| Font Awesome       | Icons for UI elements               |
+| EmailJS / Formspree| (Optional) Contact form backend     |
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🧩 Folder Structure
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+📁 gasawa-shipping/
+├── index.html # Main landing page
+├── style.css # Optional: custom styles (minimal if using Tailwind)
+├── assets/
+│ ├── video.mp4 # Hero background video
+│ ├── logo.svg # Company logo
+└── scripts/
+└── contact.js # Handles contact form submissions
 
-# Step 3: Install the necessary dependencies.
-npm i
+yaml
+Copy
+Edit
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 📬 Contact Form Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The contact form is wired to send messages to:
 
-**Use GitHub Codespaces**
+📧 info@gasawa-shipping.com
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+yaml
+Copy
+Edit
 
-## What technologies are used for this project?
+To make this work:
+1. Use a service like [Formspree](https://formspree.io/) or [EmailJS](https://www.emailjs.com/)
+2. Update the `contact.js` or form `action` to route messages appropriately.
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📷 Preview
 
-## How can I deploy this project?
+![Screenshot](./assets/screenshot.png)
 
-Simply open [Lovable](https://lovable.dev/projects/4167d7ce-81f9-4020-855d-b2f9634efb05) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## 🛠️ Future Enhancements
 
-Yes, you can!
+- Admin dashboard for service inquiries
+- Live tracking integration
+- Multilingual support
+- Google Maps embed for office location
+- Chatbot for quick help
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📄 License
+
+This project is licensed under MIT. Free to use, modify, and deploy for client use.
+
+---
+
+## 🤝 Developed By
+
+**Gasawa Shipping Dev Team**  
+Brought to life by [Your Name], Frontend Developer  
+🧭 Kenya | 🌍 Available for freelance and collaboration  
