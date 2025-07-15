@@ -20,9 +20,9 @@ const Services = () => {
     },
     {
       icon: FileText,
-      title: "Customs Clearance",
-      description: "Expert customs brokerage and documentation services to ensure smooth cargo clearance.",
-      features: ["Import/Export Documentation", "Duty & Tax Calculation", "Regulatory Compliance"]
+      title: "Port Agency Services",
+      description: "Comprehensive vessel calls coordination and port services management.",
+      features: ["Vessel calls coordination (arrival, berthing & departure)", "Documentation & clearance (customs, immigration, port authority)", "Local liaison with terminal operators, port authorities and service providers", "Bunker procurement and fresh water arrangements", "Cost control and disbursement account preparation"]
     },
     {
       icon: Truck,
@@ -38,9 +38,9 @@ const Services = () => {
     },
     {
       icon: Shield,
-      title: "Cargo Insurance",
-      description: "Comprehensive insurance coverage to protect your valuable cargo during transit.",
-      features: ["Marine Insurance", "Risk Assessment", "Claims Support"]
+      title: "Husbandry & Crew Support",
+      description: "Complete crew management and vessel husbandry services for maritime operations.",
+      features: ["Crew changes (embarkation/disembarkation, visas, transportation)", "Provisions & ship stores supply", "Fresh water supply & bunkering coordination", "Hull cleaning & underwater inspection coordination", "Medical assistance and repatriation arrangements"]
     },
     {
       icon: Clock,
