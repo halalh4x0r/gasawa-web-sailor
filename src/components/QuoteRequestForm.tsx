@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Ship, MapPin, Package, FileText, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
 
 interface QuoteRequestFormProps {
   children: React.ReactNode;
@@ -78,14 +79,44 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-quote-request', {
-        body: formData
-      });
+      // Save to database first
+      const { data, error } = await supabase
+        .from('quote_requests')
+        .insert([formData])
+        .select();
 
       if (error) {
-        console.error('Error sending quote request:', error);
+        console.error('Error saving quote request:', error);
         throw error;
       }
+
+      // Send emails using EmailJS
+      const templateParams = {
+        to_name: 'Gasawa Shipping',
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        company: formData.company || 'Not provided',
+        country: formData.country,
+        port_name: formData.port_name,
+        vessel_type: formData.vessel_type,
+        grt_nrt: formData.grt_nrt,
+        dwt: formData.dwt,
+        loa_beam: formData.loa_beam,
+        built: formData.built,
+        crane_capacity: formData.crane_capacity,
+        commodity: formData.commodity,
+        quantity: formData.quantity,
+        additional_notes: formData.additional_notes || 'None',
+        reply_to: formData.email,
+      };
+
+      // Replace these with your EmailJS credentials
+      const SERVICE_ID = 'your_service_id';
+      const TEMPLATE_ID = 'your_template_id';
+      const PUBLIC_KEY = 'your_public_key';
+
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
 
       toast({
         title: "Quote Request Sent!",
