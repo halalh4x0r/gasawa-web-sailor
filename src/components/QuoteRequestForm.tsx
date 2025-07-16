@@ -90,24 +90,16 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
         throw error;
       }
 
-      // Send emails using EmailJS
+      // Send emails using EmailJS with simplified format
       const templateParams = {
         to_name: 'Gasawa Shipping',
         from_name: formData.name,
         from_email: formData.email,
-        phone: formData.phone || 'Not provided',
-        company: formData.company || 'Not provided',
-        country: formData.country,
-        port_name: formData.port_name,
+        from_phone: formData.phone || 'Not provided',
+        from_company: formData.company || 'Not provided',
+        from_country: formData.country,
+        from_port_name: formData.port_name,
         vessel_type: formData.vessel_type,
-        grt_nrt: formData.grt_nrt,
-        dwt: formData.dwt,
-        loa_beam: formData.loa_beam,
-        built: formData.built,
-        crane_capacity: formData.crane_capacity,
-        commodity: formData.commodity,
-        quantity: formData.quantity,
-        additional_notes: formData.additional_notes || 'None',
         reply_to: formData.email,
       };
 
