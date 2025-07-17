@@ -117,7 +117,10 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
       // Save to database first  
       const { data, error } = await supabase
         .from('quote_requests')
-        .insert([sanitizedData])
+        .insert([{
+          ...sanitizedData,
+          user_id: null // Explicitly set to null for anonymous submissions
+        }])
         .select();
 
       if (error) {
