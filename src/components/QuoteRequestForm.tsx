@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Ship, MapPin, Package, FileText, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import emailjs from '@emailjs/browser';
 
 interface QuoteRequestFormProps {
   children: React.ReactNode;
@@ -60,17 +59,53 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
     }));
   };
 
+  // Input sanitization function
+  const sanitizeInput = (input: string): string => {
+    return input.trim().replace(/<[^>]*>/g, '').substring(0, 1000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Sanitize all inputs
+    const sanitizedData = {
+      ...formData,
+      name: sanitizeInput(formData.name),
+      email: sanitizeInput(formData.email),
+      phone: sanitizeInput(formData.phone),
+      company: sanitizeInput(formData.company),
+      country: sanitizeInput(formData.country),
+      port_name: sanitizeInput(formData.port_name),
+      vessel_type: sanitizeInput(formData.vessel_type),
+      grt_nrt: sanitizeInput(formData.grt_nrt),
+      dwt: sanitizeInput(formData.dwt),
+      loa_beam: sanitizeInput(formData.loa_beam),
+      built: sanitizeInput(formData.built),
+      crane_capacity: sanitizeInput(formData.crane_capacity),
+      commodity: sanitizeInput(formData.commodity),
+      quantity: sanitizeInput(formData.quantity),
+      additional_notes: sanitizeInput(formData.additional_notes)
+    };
+    
     // Validate required fields
     const requiredFields = ['name', 'email', 'country', 'port_name', 'vessel_type', 'grt_nrt', 'dwt', 'loa_beam', 'built', 'crane_capacity', 'commodity', 'quantity'];
-    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
+    const missingFields = requiredFields.filter(field => !sanitizedData[field as keyof typeof sanitizedData]);
     
     if (missingFields.length > 0) {
       toast({
         title: "Missing Required Fields",
         description: "Please fill in all required fields marked with *",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedData.email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
         variant: "destructive",
       });
       return;
@@ -82,7 +117,7 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
       // Save to database first  
       const { data, error } = await supabase
         .from('quote_requests')
-        .insert([formData])
+        .insert([sanitizedData])
         .select();
 
       if (error) {
@@ -90,25 +125,15 @@ const QuoteRequestForm = ({ children }: QuoteRequestFormProps) => {
         throw error;
       }
 
-      // Send emails using EmailJS with simplified format
-      const templateParams = {
-        to_name: 'Gasawa Shipping',
-        from_name: formData.name,
-        from_email: formData.email,
-        from_phone: formData.phone || 'Not provided',
-        from_company: formData.company || 'Not provided',
-        from_country: formData.country,
-        from_port_name: formData.port_name,
-        vessel_type: formData.vessel_type,
-        reply_to: formData.email,
-      };
+      // Send email using secure edge function
+      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-quote-request', {
+        body: sanitizedData
+      });
 
-      // EmailJS credentials
-      const SERVICE_ID = 'service_ofst3p8';
-      const TEMPLATE_ID = 'template_8p1nprb';
-      const PUBLIC_KEY = 'bNfT3rgt0Itdd-1SC';
-
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      if (emailError) {
+        console.error('Email error:', emailError);
+        throw emailError;
+      }
 
       toast({
         title: "Quote Request Sent!",

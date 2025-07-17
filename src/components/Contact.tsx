@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import emailjs from '@emailjs/browser';
+import { supabase } from "@/integrations/supabase/client";
 import { 
   MapPin, 
   Phone, 
@@ -35,13 +35,24 @@ const Contact = () => {
     }));
   };
 
+  // Input sanitization function
+  const sanitizeInput = (input: string): string => {
+    return input.trim().replace(/<[^>]*>/g, '').substring(0, 1000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("Form submitted with data:", formData);
+    // Sanitize inputs
+    const sanitizedData = {
+      name: sanitizeInput(formData.name),
+      email: sanitizeInput(formData.email),
+      phone: sanitizeInput(formData.phone),
+      service_type: sanitizeInput(formData.service_type),
+      message: sanitizeInput(formData.message)
+    };
     
-    if (!formData.name || !formData.email || !formData.message) {
-      console.log("Validation failed - missing required fields");
+    if (!sanitizedData.name || !sanitizedData.email || !sanitizedData.message) {
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields (name, email, and message).",
@@ -50,58 +61,63 @@ const Contact = () => {
       return;
     }
 
-    console.log("Starting form submission...");
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedData.email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      console.log("Sending email with EmailJS...");
-      
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: formData.phone,
-        service_type: formData.service_type,
-        message: formData.message,
-        to_name: "Gasawa Shipping Team",
-        to_email: "info@gasawa-shipping.com"
-      };
+      // Save to database first
+      const { data, error: dbError } = await supabase
+        .from('contact_submissions')
+        .insert([sanitizedData])
+        .select();
 
-      const result = await emailjs.send(
-        'service_ofst3p8',
-        'template_g7l6kxm',
-        templateParams,
-        'bNfT3rgt0Itdd-1SC'
-      );
-
-      console.log("EmailJS response:", result);
-
-      if (result.status === 200) {
-        console.log("Success! Message sent successfully");
-        toast({
-          title: "Message sent successfully!",
-          description: "Thank you for contacting us. We'll get back to you soon.",
-        });
-        
-        // Reset form
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          service_type: "",
-          message: ""
-        });
-      } else {
-        throw new Error("Failed to send message");
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw dbError;
       }
+
+      // Send email using secure edge function
+      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-contact-email', {
+        body: sanitizedData
+      });
+
+      if (emailError) {
+        console.error('Email error:', emailError);
+        throw emailError;
+      }
+
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for contacting us. We'll get back to you soon.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        service_type: "",
+        message: ""
+      });
+
     } catch (error: any) {
       console.error("Error sending contact form:", error);
       toast({
         title: "Error sending message",
-        description: error.text || error.message || "Something went wrong. Please try again.",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
-      console.log("Form submission completed");
       setIsSubmitting(false);
     }
   };
