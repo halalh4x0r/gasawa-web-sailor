@@ -67,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const emailResponse = await resend.emails.send({
         from: "Quote Request <noreply@gasawashipping.org>",
-        to: ["info@gasawashipping.org"],
+        to: ["info@gasawa-shipping.com"],
         subject: `New Quote Request from ${quoteData.name}`,
         html: `
           <h2>New Quote Request</h2>
