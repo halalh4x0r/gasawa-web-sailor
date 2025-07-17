@@ -75,18 +75,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Save to database first
-      const { data, error: dbError } = await supabase
-        .from('contact_submissions')
-        .insert([sanitizedData])
-        .select();
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw dbError;
-      }
-
-      // Send email using secure edge function
+      // Send contact form data using secure edge function (handles both DB insert and email)
       const { data: emailData, error: emailError } = await supabase.functions.invoke('send-contact-email', {
         body: sanitizedData
       });
