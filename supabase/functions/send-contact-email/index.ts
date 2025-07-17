@@ -62,8 +62,8 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Attempting to send email to company...");
     try {
       const emailResponse = await resend.emails.send({
-        from: "Contact Form <noreply@gasawa-shipping.com>",
-        to: ["info@gasawa-shipping.com"],
+        from: "Contact Form <noreply@gasawashipping.org>",
+        to: ["info@gasawashipping.org"],
         subject: `New Contact Form Submission from ${name}`,
         html: `
           <h2>New Contact Form Submission</h2>
@@ -93,7 +93,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Attempting to send confirmation email to user...");
     try {
       const confirmationResponse = await resend.emails.send({
-        from: "Gasawa Shipping <noreply@gasawa-shipping.com>",
+        from: "Gasawa Shipping <noreply@gasawashipping.org>",
         to: [email],
         subject: "Thank you for contacting Gasawa Shipping",
         html: `

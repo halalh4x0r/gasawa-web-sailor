@@ -66,8 +66,8 @@ const handler = async (req: Request): Promise<Response> => {
     let emailSent = false;
     try {
       const emailResponse = await resend.emails.send({
-        from: "Quote Request <noreply@gasawa-shipping.com>",
-        to: ["info@gasawa-shipping.com"],
+        from: "Quote Request <noreply@gasawashipping.org>",
+        to: ["info@gasawashipping.org"],
         subject: `New Quote Request from ${quoteData.name}`,
         html: `
           <h2>New Quote Request</h2>
@@ -119,7 +119,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Attempting to send confirmation email to user...");
     try {
       const confirmationResponse = await resend.emails.send({
-        from: "Gasawa Shipping <noreply@gasawa-shipping.com>",
+        from: "Gasawa Shipping <noreply@gasawashipping.org>",
         to: [quoteData.email],
         subject: "Quote Request Received - Gasawa Shipping",
         html: `
